@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+:root {
+  --background: #faf8f5; /* Cream/ivory */
+  --foreground: #121212; /* Deep charcoal */
+  
+  /* Fonts will refer to CSS variables loaded from Google Fonts in layout.tsx */
+  --font-serif: var(--font-playfair);
+  --font-sans: var(--font-inter);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+  
+  /* Ember & Oak Design System Palette */
+  --color-terracotta: #c85a32;
+  --color-terracotta-light: #e07a53;
+  --color-terracotta-dark: #b04924;
+  
+  --color-charcoal: #121212;
+  --color-charcoal-light: #1e1e1e;
+  --color-charcoal-medium: #2a2a2a;
+  
+  --color-cream: #faf8f5;
+  --color-cream-dark: #f0ede6;
+  
+  --color-gold: #d4af37;
+  --color-gold-light: #ebd06a;
+  --color-gold-dark: #ab8b24;
+  
+  --color-sage: #7a9a83;
+  --color-sage-light: #94b29c;
+  --color-sage-dark: #5e7d66;
+}
+
+/* Global Style Overhauls */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif), serif;
+  letter-spacing: 0.02em;
+}
+
+/* Glassmorphism navigation overlay */
+.glass-header {
+  background-color: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Custom scrollbar for premium aesthetic */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #faf8f5;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c85a32;
+  border: 2px solid #faf8f5;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b04924;
+}
+
+/* Custom animations helper */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Selection highlight colors */
+::selection {
+  background-color: #c85a32;
+  color: #faf8f5;
+}
