@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Calendar, Clock, Users, User, Mail, Phone, MessageSquare, CheckCircle2 } from 'lucide-react';
+import { Calendar, Clock, Users, User, Mail, Phone, MessageSquare, CheckCircle2, ExternalLink } from 'lucide-react';
 
 export default function ReservationForm() {
   const [submitted, setSubmitted] = useState(false);
@@ -18,11 +18,6 @@ export default function ReservationForm() {
   // Popular time quick-select options
   const quickTimeSlots = ['17:00', '18:30', '19:30', '20:30'];
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitted(true);
-  };
-
   // Helper to format 24h string (e.g. "18:30") to readable 12h AM/PM
   const formatTimeLabel = (timeStr: string) => {
     if (!timeStr) return '';
@@ -32,22 +27,71 @@ export default function ReservationForm() {
     return `${displayHours}:${minutes.toString().padStart(2, '0')} ${period}`;
   };
 
+  // Build pre-filled Gmail Compose URL
+  const getGmailUrl = () => {
+    const recipient = 'events@emberandoak.com';
+    const subject = `Table Reservation Request - ${formData.name}`;
+    const body = `Hello Ember & Oak Team,
+
+I would like to request a table reservation. Here are my details:
+
+• Full Name: ${formData.name}
+• Email Address: ${formData.email}
+• Phone Number: ${formData.phone}
+• Number of Guests: ${formData.guests}
+• Date: ${formData.date}
+• Preferred Time: ${formatTimeLabel(formData.time)} (${formData.time})
+• Special Requests: ${formData.requests || 'None'}
+
+Looking forward to hearing from you.
+
+Best regards,
+${formData.name}`;
+
+    return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(recipient)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // 1. Redirect / Open Gmail compose in a new tab with pre-filled info
+    window.open(getGmailUrl(), '_blank');
+
+    // 2. Set submitted state to show success confirmation UI
+    setSubmitted(true);
+  };
+
   if (submitted) {
     return (
-      <div className="bg-white p-8 sm:p-10 rounded-2xl border-2 border-[#0f0e0d]/20 text-center space-y-6 shadow-xl">
+      <div className="bg-white p-8 sm:p-10 rounded-2xl border-2 border-[#121212]/20 text-center space-y-6 shadow-xl">
         <div className="w-16 h-16 bg-[#c85a32]/10 text-[#c85a32] rounded-full flex items-center justify-center mx-auto border border-[#c85a32]/30">
           <CheckCircle2 className="w-10 h-10 text-[#c85a32]" />
         </div>
-        <h3 className="font-serif text-3xl font-bold text-[#121212]">Reservation Requested</h3>
+
+        <h3 className="font-serif text-3xl font-bold text-[#121212]">Opening Gmail...</h3>
+
         <p className="font-sans text-xs sm:text-sm text-[#121212] leading-relaxed max-w-md mx-auto font-medium">
-          Thank you, <strong className="text-[#121212] font-bold">{formData.name}</strong>. We have received your booking request for <strong className="text-[#121212] font-bold">{formData.guests} guests</strong> on <strong className="text-[#121212] font-bold">{formData.date || 'your selected date'}</strong> at <strong className="text-[#c85a32] font-bold">{formatTimeLabel(formData.time)}</strong>.
+          Thank you, <strong className="text-[#121212] font-bold">{formData.name}</strong>. A Gmail composer tab has been opened with your reservation details for <strong className="text-[#c85a32] font-bold">events@emberandoak.com</strong>.
         </p>
-        <button
-          onClick={() => setSubmitted(false)}
-          className="px-6 py-3 bg-[#121212] text-white text-xs font-bold uppercase tracking-widest rounded hover:bg-[#c85a32] transition-colors duration-300"
-        >
-          Book Another Table
-        </button>
+
+        {/* Fallback button if popup was blocked */}
+        <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <a
+            href={getGmailUrl()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#c85a32] text-white text-xs font-bold uppercase tracking-widest rounded-lg hover:bg-[#b04924] transition-colors duration-300"
+          >
+            Re-open Gmail <ExternalLink className="w-4 h-4" />
+          </a>
+
+          <button
+            onClick={() => setSubmitted(false)}
+            className="w-full sm:w-auto px-6 py-3 bg-[#121212] text-white text-xs font-bold uppercase tracking-widest rounded-lg hover:bg-black transition-colors duration-300"
+          >
+            Edit Booking
+          </button>
+        </div>
       </div>
     );
   }
@@ -59,7 +103,7 @@ export default function ReservationForm() {
           Book Your Table
         </h2>
         <p className="font-sans text-xs font-semibold text-[#121212]/70">
-          Please complete the form below. For parties larger than 8, please contact us directly.
+          Please complete the details below. Submitting will open your Gmail with the details pre-filled for direct confirmation with events@emberandoak.com.
         </p>
       </div>
 
@@ -166,7 +210,7 @@ export default function ReservationForm() {
               {formatTimeLabel(formData.time)}
             </span>
           </div>
-          
+
           <div className="relative">
             <Clock className="w-4 h-4 text-[#121212]/60 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
@@ -183,7 +227,7 @@ export default function ReservationForm() {
         </div>
       </div>
 
-      {/* Quick Time Slots Chips */}
+      {/* Quick Time Slots */}
       <div className="space-y-2">
         <label className="block text-[11px] font-bold uppercase tracking-wider text-[#121212]/70">
           Popular Dinner Slots
@@ -229,9 +273,9 @@ export default function ReservationForm() {
       {/* Submit Button */}
       <button
         type="submit"
-        className="w-full py-4 bg-[#121212] text-white font-extrabold text-xs uppercase tracking-[0.2em] rounded-lg hover:bg-[#c85a32] transition-all duration-300 shadow-lg cursor-pointer"
+        className="w-full py-4 bg-[#121212] text-white font-extrabold text-xs uppercase tracking-[0.2em] rounded-lg hover:bg-[#c85a32] transition-all duration-300 shadow-lg cursor-pointer flex items-center justify-center gap-2"
       >
-        Confirm Reservation
+        Confirm & Send via Gmail <ExternalLink className="w-4 h-4" />
       </button>
     </form>
   );
