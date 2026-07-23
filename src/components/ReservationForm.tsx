@@ -27,11 +27,9 @@ export default function ReservationForm() {
     return `${displayHours}:${minutes.toString().padStart(2, '0')} ${period}`;
   };
 
-  // Build pre-filled Gmail Compose URL
-  const getGmailUrl = () => {
-    const recipient = 'events@emberandoak.com';
-    const subject = `Table Reservation Request - ${formData.name}`;
-    const body = `Hello Ember & Oak Team,
+  // Generate plain text email body
+  const getEmailBody = () => {
+    return `Hello Ember & Oak Team,
 
 I would like to request a table reservation. Here are my details:
 
@@ -47,17 +45,38 @@ Looking forward to hearing from you.
 
 Best regards,
 ${formData.name}`;
+  };
 
+  // Mailto URL scheme (Triggers native Gmail / Mail App on Mobile)
+  const getMailtoUrl = () => {
+    const recipient = 'events@emberandoak.com';
+    const subject = `Table Reservation Request - ${formData.name}`;
+    const body = getEmailBody();
+    return `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
+  // Web Gmail Compose URL (For Desktop Browser)
+  const getGmailWebUrl = () => {
+    const recipient = 'events@emberandoak.com';
+    const subject = `Table Reservation Request - ${formData.name}`;
+    const body = getEmailBody();
     return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(recipient)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 1. Redirect / Open Gmail compose in a new tab with pre-filled info
-    window.open(getGmailUrl(), '_blank');
+    // Check if user is on mobile
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-    // 2. Set submitted state to show success confirmation UI
+    if (isMobile) {
+      // Direct mobile deep-link to launch native Gmail app
+      window.location.href = getMailtoUrl();
+    } else {
+      // Desktop browser window opening Gmail web app
+      window.open(getGmailWebUrl(), '_blank');
+    }
+
     setSubmitted(true);
   };
 
@@ -68,21 +87,19 @@ ${formData.name}`;
           <CheckCircle2 className="w-10 h-10 text-[#c85a32]" />
         </div>
 
-        <h3 className="font-serif text-3xl font-bold text-[#121212]">Opening Gmail...</h3>
+        <h3 className="font-serif text-3xl font-bold text-[#121212]">Opening Email App...</h3>
 
         <p className="font-sans text-xs sm:text-sm text-[#121212] leading-relaxed max-w-md mx-auto font-medium">
-          Thank you, <strong className="text-[#121212] font-bold">{formData.name}</strong>. A Gmail composer tab has been opened with your reservation details for <strong className="text-[#c85a32] font-bold">events@emberandoak.com</strong>.
+          Thank you, <strong className="text-[#121212] font-bold">{formData.name}</strong>. Your pre-filled reservation email to <strong className="text-[#c85a32] font-bold">events@emberandoak.com</strong> is ready to send.
         </p>
 
-        {/* Fallback button if popup was blocked */}
+        {/* Action Buttons */}
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
           <a
-            href={getGmailUrl()}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={getMailtoUrl()}
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#c85a32] text-white text-xs font-bold uppercase tracking-widest rounded-lg hover:bg-[#b04924] transition-colors duration-300"
           >
-            Re-open Gmail <ExternalLink className="w-4 h-4" />
+            Open Mail App <ExternalLink className="w-4 h-4" />
           </a>
 
           <button
@@ -103,7 +120,7 @@ ${formData.name}`;
           Book Your Table
         </h2>
         <p className="font-sans text-xs font-semibold text-[#121212]/70">
-          Please complete the details below. Submitting will open your Gmail with the details pre-filled for direct confirmation with events@emberandoak.com.
+          Please complete the details below. Submitting will launch your Gmail app with pre-filled details for direct confirmation.
         </p>
       </div>
 
@@ -275,7 +292,7 @@ ${formData.name}`;
         type="submit"
         className="w-full py-4 bg-[#121212] text-white font-extrabold text-xs uppercase tracking-[0.2em] rounded-lg hover:bg-[#c85a32] transition-all duration-300 shadow-lg cursor-pointer flex items-center justify-center gap-2"
       >
-        Confirm & Send via Gmail <ExternalLink className="w-4 h-4" />
+        Confirm & Send Reservation <ExternalLink className="w-4 h-4" />
       </button>
     </form>
   );
