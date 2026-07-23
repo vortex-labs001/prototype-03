@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --background: #faf8f5; /* Cream/ivory */
-  --foreground: #121212; /* Deep charcoal */
+  --background: #fafaf7; /* Warm Ivory / Cream */
+  --foreground: #121110; /* Deep Obsidian Charcoal */
   
-  /* Fonts will refer to CSS variables loaded from Google Fonts in layout.tsx */
-  --font-serif: var(--font-playfair);
-  --font-sans: var(--font-inter);
+  /* High-end Google Fonts loaded via layout.tsx */
+  --font-serif: var(--font-cormorant);
+  --font-sans: var(--font-jakarta);
 }
 
 @theme inline {
@@ -16,28 +16,28 @@
   --font-serif: var(--font-serif);
   --font-sans: var(--font-sans);
   
-  /* Ember & Oak Design System Palette */
-  --color-terracotta: #c85a32;
-  --color-terracotta-light: #e07a53;
-  --color-terracotta-dark: #b04924;
+  /* Ember & Oak Refined Color Palette */
+  --color-ember: #d9531e;
+  --color-ember-light: #f26a36;
+  --color-ember-dark: #b33a0b;
   
-  --color-charcoal: #121212;
-  --color-charcoal-light: #1e1e1e;
-  --color-charcoal-medium: #2a2a2a;
+  --color-obsidian: #0f0e0d;
+  --color-charcoal-card: #181615;
+  --color-charcoal-muted: #24211f;
   
-  --color-cream: #faf8f5;
+  --color-cream: #fafaf7;
   --color-cream-dark: #f0ede6;
+  --color-sand: #e6e0d5;
   
   --color-gold: #d4af37;
-  --color-gold-light: #ebd06a;
-  --color-gold-dark: #ab8b24;
+  --color-gold-light: #f3e5ab;
+  --color-gold-dark: #a38118;
   
-  --color-sage: #7a9a83;
-  --color-sage-light: #94b29c;
-  --color-sage-dark: #5e7d66;
+  --color-cabernet: #6b1d2f;
+  --color-sage: #6b8871;
 }
 
-/* Global Style Overhauls */
+/* Base Styles */
 html {
   scroll-behavior: smooth;
 }
@@ -53,48 +53,74 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-serif), serif;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
 }
 
-/* Glassmorphism navigation overlay */
-.glass-header {
-  background-color: rgba(18, 18, 18, 0.85);
+/* Gold Gradient Text Utility */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 50%, #aa8214 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-ember-gradient {
+  background: linear-gradient(135deg, #f26a36 0%, #d9531e 50%, #b33a0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Custom Glow & Glassmorphism Utilities */
+.ember-glow {
+  box-shadow: 0 0 25px rgba(217, 83, 30, 0.35);
+}
+
+.gold-glow {
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.25);
+}
+
+.glass-dark {
+  background: rgba(15, 14, 13, 0.82);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Custom scrollbar for premium aesthetic */
+.glass-light {
+  background: rgba(250, 250, 247, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #faf8f5;
+  background: #0f0e0d;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c85a32;
-  border: 2px solid #faf8f5;
-  border-radius: 5px;
+  background: #d9531e;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #b04924;
+  background: #b33a0b;
 }
 
-/* Custom animations helper */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Animations */
+@keyframes pulseFlame {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.03); }
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.animate-flame {
+  animation: pulseFlame 3s infinite ease-in-out;
 }
 
-/* Selection highlight colors */
 ::selection {
-  background-color: #c85a32;
-  color: #faf8f5;
+  background-color: #d9531e;
+  color: #fafaf7;
 }
