@@ -1,124 +1,201 @@
-import React from 'react';
-import ReservationForm from '@/components/ReservationForm';
-import { CalendarRange, ShieldAlert, Sparkles, Clock, GlassWater, Flame, Mail } from 'lucide-react';
+'use client';
 
-export default function Reservation() {
-  const guidelines = [
-    {
-      icon: Clock,
-      title: 'Table Hold Policy',
-      desc: 'We hold reserved tables for up to 15 minutes past your scheduled time. Please call us directly if you are running late.',
-    },
-    {
-      icon: CalendarRange,
-      title: 'Seating Duration',
-      desc: 'To ensure a seamless flow of service, dinner reservations are allocated 2 hours. Brunch seatings are allocated 90 minutes.',
-    },
-    {
-      icon: GlassWater,
-      title: 'Dress Code & Ambience',
-      desc: 'Smart casual attire requested. We kindly ask guests to refrain from athletic wear, swimwear, or beachwear.',
-    },
-    {
-      icon: ShieldAlert,
-      title: 'Cancellation Notice',
-      desc: 'Should your plans change, please notify us at least 24 hours in advance to avoid a late cancellation fee.',
-    },
-  ];
+import React, { useState } from 'react';
+import { Calendar, Clock, Users, User, Mail, Phone, MessageSquare, CheckCircle2 } from 'lucide-react';
+
+export default function ReservationForm() {
+  const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    date: '',
+    time: '18:00',
+    guests: '2',
+    requests: '',
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+  };
+
+  if (submitted) {
+    return (
+      <div className="bg-white p-8 sm:p-10 rounded-2xl border border-obsidian/10 text-center space-y-6 shadow-xl">
+        <div className="w-16 h-16 bg-ember/10 text-ember rounded-full flex items-center justify-center mx-auto border border-ember/20">
+          <CheckCircle2 className="w-10 h-10 text-ember" />
+        </div>
+        <h3 className="font-serif text-3xl font-bold text-obsidian">Reservation Requested</h3>
+        <p className="font-sans text-xs sm:text-sm text-obsidian/75 leading-relaxed max-w-md mx-auto">
+          Thank you, <strong className="text-obsidian font-semibold">{formData.name}</strong>. We have received your booking request for <strong className="text-obsidian font-semibold">{formData.guests} guests</strong> on <strong className="text-obsidian font-semibold">{formData.date || 'your selected date'}</strong>.
+        </p>
+        <p className="text-xs text-obsidian/50 italic">
+          A confirmation email will be sent to {formData.email}.
+        </p>
+        <button
+          onClick={() => setSubmitted(false)}
+          className="px-6 py-3 bg-obsidian text-cream text-xs font-bold uppercase tracking-widest rounded hover:bg-ember transition-colors duration-300"
+        >
+          Book Another Table
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-16 font-sans">
-      
-      {/* 1. Page Header */}
-      <div className="text-center max-w-2xl mx-auto space-y-4">
-        <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-ember/10 border border-ember/20 text-ember text-xs font-bold uppercase tracking-[0.2em]">
-          <Flame className="w-3.5 h-3.5" />
-          <span>Table Booking</span>
-        </div>
-
-        <h1 className="font-serif text-4xl sm:text-6xl font-semibold text-obsidian tracking-wide uppercase">
-          Reservations
-        </h1>
-
-        <div className="w-16 h-0.5 bg-gradient-to-r from-ember to-gold mx-auto"></div>
-
-        <p className="font-sans text-xs sm:text-sm text-obsidian/70 leading-relaxed max-w-lg mx-auto">
-          Secure your wood-fired culinary journey in Napa Valley. We recommend booking 2–3 weeks in advance for weekend dinner slots.
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="space-y-1">
+        <h2 className="font-serif text-2xl font-bold text-obsidian">Book Your Table</h2>
+        <p className="font-sans text-xs text-obsidian/65">
+          Select your party size, date, and preferred dining time.
         </p>
       </div>
 
-      {/* 2. Main Split Grid (Form vs Guidelines) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-        
-        {/* Reservation Form Container (7 cols) */}
-        <div className="lg:col-span-7 bg-cream-dark/40 border border-obsidian/10 p-6 sm:p-10 rounded-2xl shadow-xl">
-          <ReservationForm />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        {/* Full Name */}
+        <div className="space-y-2">
+          <label className="block text-xs font-bold uppercase tracking-wider text-obsidian">
+            Full Name <span className="text-ember">*</span>
+          </label>
+          <div className="relative">
+            <User className="w-4 h-4 text-obsidian/40 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              required
+              placeholder="e.g. John Doe"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              className="w-full pl-10 pr-4 py-3 bg-white border border-obsidian/20 rounded text-obsidian font-sans text-xs focus:outline-none focus:border-ember focus:ring-1 focus:ring-ember transition-all"
+            />
+          </div>
         </div>
 
-        {/* Dining Guidelines Sidebar (5 cols) */}
-        <div className="lg:col-span-5 space-y-8 bg-obsidian text-cream p-8 sm:p-10 rounded-2xl border border-white/10 shadow-2xl relative overflow-hidden">
-          
-          {/* Ambient Ember Glow Background Effect */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-ember/10 rounded-full blur-3xl pointer-events-none"></div>
-
-          {/* Guidelines Header */}
-          <div className="space-y-3 relative z-10">
-            <div className="inline-flex items-center gap-2 text-gold text-xs font-bold uppercase tracking-widest">
-              <Sparkles className="w-4 h-4" />
-              <span>Dining Etiquette</span>
-            </div>
-            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-cream">
-              Guest Guidelines
-            </h2>
-            <div className="w-10 h-0.5 bg-ember"></div>
-            <p className="font-sans text-xs text-cream-dark/70 leading-relaxed">
-              We look forward to welcoming you to Ember & Oak. Please review our policies below to guarantee an extraordinary experience for all guests.
-            </p>
+        {/* Email */}
+        <div className="space-y-2">
+          <label className="block text-xs font-bold uppercase tracking-wider text-obsidian">
+            Email Address <span className="text-ember">*</span>
+          </label>
+          <div className="relative">
+            <Mail className="w-4 h-4 text-obsidian/40 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="email"
+              required
+              placeholder="john@example.com"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              className="w-full pl-10 pr-4 py-3 bg-white border border-obsidian/20 rounded text-obsidian font-sans text-xs focus:outline-none focus:border-ember focus:ring-1 focus:ring-ember transition-all"
+            />
           </div>
+        </div>
 
-          {/* List of Guidelines */}
-          <div className="space-y-6 relative z-10">
-            {guidelines.map((guide, idx) => {
-              const Icon = guide.icon;
-              return (
-                <div key={idx} className="flex gap-4 items-start">
-                  <div className="w-10 h-10 rounded-xl bg-ember/15 border border-ember/30 flex items-center justify-center shrink-0 text-ember shadow-md">
-                    <Icon className="w-5 h-5 text-ember" />
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="font-serif text-base font-bold text-cream tracking-wide">
-                      {guide.title}
-                    </h3>
-                    <p className="font-sans text-xs text-cream-dark/70 leading-relaxed">
-                      {guide.desc}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
+        {/* Phone */}
+        <div className="space-y-2">
+          <label className="block text-xs font-bold uppercase tracking-wider text-obsidian">
+            Phone Number <span className="text-ember">*</span>
+          </label>
+          <div className="relative">
+            <Phone className="w-4 h-4 text-obsidian/40 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="tel"
+              required
+              placeholder="(707) 555-0199"
+              value={formData.phone}
+              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              className="w-full pl-10 pr-4 py-3 bg-white border border-obsidian/20 rounded text-obsidian font-sans text-xs focus:outline-none focus:border-ember focus:ring-1 focus:ring-ember transition-all"
+            />
           </div>
+        </div>
 
-          {/* Private Dinners & Buyouts Notice */}
-          <div className="pt-8 border-t border-white/10 space-y-3 relative z-10">
-            <h3 className="font-serif text-lg font-bold text-gold">
-              Private Dinners & Full Buyouts
-            </h3>
-            <p className="font-sans text-xs text-cream-dark/75 leading-relaxed">
-              Planning a wedding rehearsal, corporate dinner, or estate gathering? We offer private cellar spaces and curated family-style wood-fired menus.
-            </p>
-            <a 
-              href="mailto:events@emberandoak.com" 
-              className="inline-flex items-center gap-2 text-xs font-bold text-ember hover:text-gold transition-colors tracking-wide pt-1"
+        {/* Guests */}
+        <div className="space-y-2">
+          <label className="block text-xs font-bold uppercase tracking-wider text-obsidian">
+            Guests <span className="text-ember">*</span>
+          </label>
+          <div className="relative">
+            <Users className="w-4 h-4 text-obsidian/40 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <select
+              value={formData.guests}
+              onChange={(e) => setFormData({ ...formData, guests: e.target.value })}
+              className="w-full pl-10 pr-4 py-3 bg-white border border-obsidian/20 rounded text-obsidian font-sans text-xs focus:outline-none focus:border-ember focus:ring-1 focus:ring-ember transition-all cursor-pointer"
             >
-              <Mail className="w-3.5 h-3.5" />
-              <span>Contact events@emberandoak.com</span>
-            </a>
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+                <option key={num} value={num} className="bg-white text-obsidian">
+                  {num} {num === 1 ? 'Guest' : 'Guests'}
+                </option>
+              ))}
+              <option value="9+" className="bg-white text-obsidian">Large Party (9+ Guests)</option>
+            </select>
           </div>
-
         </div>
 
+        {/* Date */}
+        <div className="space-y-2">
+          <label className="block text-xs font-bold uppercase tracking-wider text-obsidian">
+            Date <span className="text-ember">*</span>
+          </label>
+          <div className="relative">
+            <Calendar className="w-4 h-4 text-obsidian/40 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="date"
+              required
+              value={formData.date}
+              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+              className="w-full pl-10 pr-4 py-3 bg-white border border-obsidian/20 rounded text-obsidian font-sans text-xs focus:outline-none focus:border-ember focus:ring-1 focus:ring-ember transition-all"
+            />
+          </div>
+        </div>
+
+        {/* Time */}
+        <div className="space-y-2">
+          <label className="block text-xs font-bold uppercase tracking-wider text-obsidian">
+            Preferred Time <span className="text-ember">*</span>
+          </label>
+          <div className="relative">
+            <Clock className="w-4 h-4 text-obsidian/40 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <select
+              value={formData.time}
+              onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+              className="w-full pl-10 pr-4 py-3 bg-white border border-obsidian/20 rounded text-obsidian font-sans text-xs focus:outline-none focus:border-ember focus:ring-1 focus:ring-ember transition-all cursor-pointer"
+            >
+              <option value="17:00" className="bg-white text-obsidian">5:00 PM</option>
+              <option value="17:30" className="bg-white text-obsidian">5:30 PM</option>
+              <option value="18:00" className="bg-white text-obsidian">6:00 PM</option>
+              <option value="18:30" className="bg-white text-obsidian">6:30 PM</option>
+              <option value="19:00" className="bg-white text-obsidian">7:00 PM</option>
+              <option value="19:30" className="bg-white text-obsidian">7:30 PM</option>
+              <option value="20:00" className="bg-white text-obsidian">8:00 PM</option>
+              <option value="20:30" className="bg-white text-obsidian">8:30 PM</option>
+              <option value="21:00" className="bg-white text-obsidian">9:00 PM</option>
+            </select>
+          </div>
+        </div>
       </div>
 
-    </div>
+      {/* Special Requests */}
+      <div className="space-y-2">
+        <label className="block text-xs font-bold uppercase tracking-wider text-obsidian">
+          Special Requests / Dietary Notes
+        </label>
+        <div className="relative">
+          <MessageSquare className="w-4 h-4 text-obsidian/40 absolute left-3.5 top-3.5" />
+          <textarea
+            rows={3}
+            placeholder="Anniversary celebration, window table preference, food allergies..."
+            value={formData.requests}
+            onChange={(e) => setFormData({ ...formData, requests: e.target.value })}
+            className="w-full pl-10 pr-4 py-3 bg-white border border-obsidian/20 rounded text-obsidian font-sans text-xs focus:outline-none focus:border-ember focus:ring-1 focus:ring-ember transition-all"
+          ></textarea>
+        </div>
+      </div>
+
+      {/* Submit Button */}
+      <button
+        type="submit"
+        className="w-full py-4 bg-ember text-cream font-bold text-xs uppercase tracking-[0.2em] rounded-lg hover:bg-ember-dark transition-all duration-300 shadow-md ember-glow cursor-pointer"
+      >
+        Confirm Reservation
+      </button>
+    </form>
   );
 }
