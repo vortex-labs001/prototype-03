@@ -1,120 +1,20 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #fafaf7; /* Warm Ivory / Cream */
-  --foreground: #0f0e0d; /* Deep Obsidian Charcoal */
-  
-  --font-serif: var(--font-cormorant);
-  --font-sans: var(--font-jakarta);
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  
-  --font-serif: var(--font-serif);
-  --font-sans: var(--font-sans);
-  
-  --color-ember: #d9531e;
-  --color-ember-light: #f26a36;
-  --color-ember-dark: #b33a0b;
-  
-  --color-obsidian: #0f0e0d;
-  --color-charcoal-card: #181615;
-  --color-charcoal-muted: #24211f;
-  
-  --color-cream: #fafaf7;
-  --color-cream-dark: #f0ede6;
-  --color-sand: #e6e0d5;
-  
-  --color-gold: #d4af37;
-  --color-gold-light: #f3e5ab;
-  --color-gold-dark: #a38118;
-  
-  --color-cabernet: #6b1d2f;
-  --color-sage: #5e7d66;
-}
-
-/* Base Style Overrides */
-html {
-  scroll-behavior: smooth;
-}
-
+/* Strict global color reset */
 body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), sans-serif;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Fix for form fields blending into white backgrounds */
-input, textarea, select {
+  background-color: #fafaf7 !important;
   color: #0f0e0d !important;
-  background-color: #ffffff;
 }
 
-/* Fix for browser native select dropdown list text */
-option {
+/* Force dark text on form elements */
+input, select, textarea, option {
   color: #0f0e0d !important;
   background-color: #ffffff !important;
 }
 
-/* Placeholder visibility reset */
 ::placeholder {
-  color: rgba(15, 14, 13, 0.45) !important;
-  opacity: 1;
-}
-
-/* Headings always default to Obsidian */
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-serif), serif;
-  color: inherit;
-}
-
-/* Utility Gradients & Glows */
-.text-gold-gradient {
-  background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 50%, #a38118 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.text-ember-gradient {
-  background: linear-gradient(135deg, #f26a36 0%, #d9531e 50%, #b33a0b 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.ember-glow {
-  box-shadow: 0 0 25px rgba(217, 83, 30, 0.35);
-}
-
-.gold-glow {
-  box-shadow: 0 0 20px rgba(212, 175, 55, 0.25);
-}
-
-.glass-dark {
-  background: rgba(15, 14, 13, 0.88);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0f0e0d;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #d9531e;
-  border-radius: 4px;
-}
-
-::selection {
-  background-color: #d9531e;
-  color: #fafaf7;
+  color: rgba(15, 14, 13, 0.6) !important;
+  opacity: 1 !important;
 }
